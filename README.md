@@ -11,6 +11,10 @@ Whether it runs *correctly* is outside the scope of this library.
 npm install vibelib
 ```
 
+## AI Usage Declaration
+
+This project is reviewed by no fewer than 35 of the industry's top AI agents. Absolutely reliable, first-class quality. The industry's ~~cancer~~ conscience, here to help you succeed.
+
 ## ErrorRemover
 
 Errors are annoying, but it's your right not to see them.
