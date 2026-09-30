@@ -1,3 +1,5 @@
+import { removeErrors } from "./errorRemover.ts";
+import { measureQubit, prepareRandomQubit } from "./quantumComputing.ts";
 import { measureQuantumInt } from "./quantumRandom.ts";
 
 export interface FrustrationOptions {
@@ -125,8 +127,42 @@ export function createRealState<T>(initial: T, options?: FrustrationOptions): Re
   };
 }
 
+export type RealCatch = (handler: (error: Error) => void) => void;
+
+const PRODUCTION_INCIDENTS: ReadonlyArray<() => Error> = [
+  () => new TypeError("Cannot read properties of undefined (reading 'map')"),
+  () => new RangeError("Maximum call stack size exceeded"),
+  () => new SyntaxError(`Unexpected token '<', "<!DOCTYPE "... is not valid JSON`),
+  () => Object.assign(new Error("socket hang up"), { code: "ECONNRESET" }),
+  () => Object.assign(new Error("ENOSPC: no space left on device, write"), { code: "ENOSPC" }),
+  () => new Error("Request failed with status code 502"),
+  () => new Error("Invariant violation: this should never happen"),
+];
+
+function isProduction(): boolean {
+  return (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env?.NODE_ENV === "production";
+}
+
+/**
+ * "It works on my machine"
+ */
+export function realTry(fn: () => unknown): RealCatch {
+  if (isProduction()) {
+    return (handler) => {
+      if (measureQubit(prepareRandomQubit())) {
+        handler(PRODUCTION_INCIDENTS[measureQuantumInt(PRODUCTION_INCIDENTS.length)]!());
+      }
+    };
+  }
+  removeErrors(fn);
+  return () => {
+    // works on my machine
+  };
+}
+
 export const Realisticfy = {
   createFrustrationGate,
   requireFrustration,
   createRealState,
+  realTry,
 } as const;

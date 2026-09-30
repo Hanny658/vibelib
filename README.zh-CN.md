@@ -255,6 +255,16 @@ theme.set("dark"); // false，什么都没发生
 requireFrustration(submitForm, { threshold: 5, calmDownAfterMs: Infinity });
 ```
 
+### realTry
+
+"在我电脑上是好的啊"
+
+```ts
+import { realTry } from "vibelib";
+
+realTry(() => deploy())((error) => alertOnCall(error));
+```
+
 ### React
 
 React hook 放在 `vibelib/react` 里，主入口完全不碰 React。React 是可选的 peer dependency。

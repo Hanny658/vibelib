@@ -256,6 +256,16 @@ By default the threshold is `"realistic"`: a fresh random number between 3 and 8
 requireFrustration(submitForm, { threshold: 5, calmDownAfterMs: Infinity });
 ```
 
+### realTry
+
+"It works on my machine"
+
+```ts
+import { realTry } from "vibelib";
+
+realTry(() => deploy())((error) => alertOnCall(error));
+```
+
 ### React
 
 React hooks live in `vibelib/react`, so the main entry point never touches React. React is an optional peer dependency.

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { Realisticfy, createFrustrationGate, createRealState, requireFrustration } from "../src/index.ts";
+import { Realisticfy, createFrustrationGate, createRealState, realTry, requireFrustration } from "../src/index.ts";
 
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -65,3 +65,43 @@ test("createRealState does not notify when the value doesn't change", () => {
   state.set("same");
   assert.equal(notified, 0);
 });
+
+async function withNodeEnv(value: string | undefined, body: () => void | Promise<void>) {
+  const previous = process.env.NODE_ENV;
+  if (value === undefined) delete process.env.NODE_ENV;
+  else process.env.NODE_ENV = value;
+  try {
+    await body();
+  } finally {
+    if (previous === undefined) delete process.env.NODE_ENV;
+    else process.env.NODE_ENV = previous;
+  }
+}
+
+for (const env of ["development", undefined, "test"]) {
+  test(`realTry in ${env ?? "unset"} NODE_ENV runs fn and never reports an error`, () =>
+    withNodeEnv(env, async () => {
+      let ran = 0;
+      let caught = 0;
+      realTry(() => { ran++; throw new Error("boom"); })(() => caught++);
+      realTry(async () => { ran++; throw new Error("async boom"); })(() => caught++);
+      realTry(() => ran++)(() => caught++);
+      await new Promise((r) => setTimeout(r, 5));
+      assert.equal(ran, 3);
+      assert.equal(caught, 0);
+    }));
+}
+
+test("realTry in production never runs fn and sometimes reports a realistic error", () =>
+  withNodeEnv("production", () => {
+    let ran = 0;
+    const errors: Error[] = [];
+    for (let i = 0; i < 400; i++) {
+      const realCatch = Realisticfy.realTry(() => ran++);
+      realCatch((error) => errors.push(error));
+    }
+    assert.equal(ran, 0);
+    assert.ok(errors.length > 120 && errors.length < 280);
+    assert.ok(errors.every((e) => e instanceof Error && e.message.length > 0));
+    assert.ok(new Set(errors.map((e) => e.message)).size > 3);
+  }));

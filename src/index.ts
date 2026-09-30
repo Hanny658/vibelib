@@ -29,6 +29,8 @@ export {
   createFrustrationGate,
   requireFrustration,
   createRealState,
+  realTry,
+  type RealCatch,
   type FrustrationGate,
   type FrustrationOptions,
   type RealState,
