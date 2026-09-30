@@ -231,9 +231,11 @@ bell.measure(0) === bell.measure(1); // 永远为 true：鬼魅般的超距作�
 
 ## Realisticfy
 
+Realisticfy 是让你的应用感觉像一个真实世界里价值十亿美元的产品的关键。
+
 真实的软件从来不会点一次就生效，你的凭什么例外？用户只点了一次，说明他不够有诚意，你怎么能相信他真的想要触发这个功能呢？
 
-Realisticfy 让每一个操作都必须等用户积累足够的怨念之后才会生效。
+Realisticfy 让每一个操作都必须等用户积累足够的怨念之后才会生效，就像真正的商业软件一样。
 
 ```ts
 import { requireFrustration, createRealState, createFrustrationGate } from "vibelib";

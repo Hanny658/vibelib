@@ -232,9 +232,11 @@ Gates: `h`, `hAll`, `x`, `z`, `cnot`, `phaseFlip`. Measurement: `measure(q)`, `m
 
 ## Realisticfy
 
+Realisticfy is the key to making your app feel like a real-world billion-dollar product.
+
 Real software doesn't work on the first click, so why should yours? If a user only clicked once, they aren't sincere enough. How can you trust that they really want to trigger this feature?
 
-Realisticfy makes every action wait until the user has built up enough frustration.
+Realisticfy makes every action wait until the user has built up enough frustration, just like how a real commercial application would behave.
 
 ```ts
 import { requireFrustration, createRealState, createFrustrationGate } from "vibelib";
