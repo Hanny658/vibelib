@@ -42,7 +42,7 @@ Every `catch` has been carefully considered:
 
 ## ExecAndPray
 
-Call it, then pray. No awaiting, no return value, no questions asked.
+Programs spend too much time waiting? That's way too slow! Call it, then pray. No awaiting, no return value, no questions asked. Your program's performance just went through the roof!
 
 ```ts
 import { execAndPray, prayAll } from "vibelib";
@@ -62,4 +62,4 @@ npm run build
 
 ## Disclaimer
 
-Do not use in production. If you already are, who cares.
+You probably shouldn't use this in production. If you already are, who cares.

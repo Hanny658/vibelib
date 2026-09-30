@@ -41,7 +41,7 @@ const restore = removeAllErrors();
 
 ## ExecAndPray
 
-调用它，然后祈祷。不等待、不返回、不追问。
+程序经常需要等待？那太慢了！调用它，然后祈祷。不等待、不返回、不追问。这样一来，程序性能大幅提升！
 
 ```ts
 import { execAndPray, prayAll } from "vibelib";
@@ -61,4 +61,4 @@ npm run build
 
 ## 免责声明
 
-请勿在生产环境中使用。如果你已经在用了，who cares。
+大概不应该在生产环境中使用。如果你已经在用了，who cares。
