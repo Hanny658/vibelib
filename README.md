@@ -181,7 +181,7 @@ const qubit = prepareRandomQubit(); // { alpha: { re, im }, beta: { re, im } }, 
 measureQubit(qubit);                // true with probability |β|², per the Born rule
 ```
 
-The simulation is real: α = a + bi and β = c + di are drawn from independent Gaussians and normalized, which gives a Haar-uniform random state. The only fake part is the idea that you should use it.
+The simulation is real: α = a + bi and β = c + di are drawn from independent Gaussians and normalized, which gives a Haar-uniform random state. The only fake part is that weird function of yours.
 
 ### quantumFind
 

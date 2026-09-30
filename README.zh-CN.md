@@ -180,7 +180,7 @@ const qubit = prepareRandomQubit(); // { alpha: { re, im }, beta: { re, im } }�
 measureQubit(qubit);                // 按玻恩规则，以 |β|² 的概率返回 true
 ```
 
-模拟是真的：α = a + bi 和 β = c + di 由独立的高斯分布随机生成再归一化，得到的是 Haar 均匀的随机态。唯一假的部分，是"你应该用它"这个想法。
+模拟是真的：α = a + bi 和 β = c + di 由独立的高斯分布随机生成再归一化，得到的是 Haar 均匀的随机态。唯一假的部分，是你的那个莫名其妙的函数。
 
 ### quantumFind
 
