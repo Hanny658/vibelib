@@ -311,6 +311,21 @@ alwaysWorkResolver([
 
 版本约束更像是一种建议。安装顺序就是你给的顺序，因为你最懂。
 
+## MemoryOptimization
+
+垃圾回收是一种开销。泄露的内存需要被重新管理。
+
+### memoryLeakAbsorber
+
+如果所有对象都一直被它持有，那内存就没有泄露。
+
+```ts
+import { MemoryOptimization, memoryLeakAbsorber, absorbedObjectCount } from "vibelib";
+
+const user = memoryLeakAbsorber(await fetchUser()); // 原样返回同一个对象；深拷贝一份永久保存
+absorbedObjectCount(); // 当前被重新管理的对象数量。这个数字只会上涨
+```
+
 ## 开发
 
 ```sh

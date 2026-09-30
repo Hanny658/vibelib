@@ -312,6 +312,21 @@ alwaysWorkResolver([
 
 Constraints are more like guidelines. The install order is the order you gave us, because you know best.
 
+## MemoryOptimization
+
+Garbage collection is overhead. Leaked memory needs to be re-managed.
+
+### memoryLeakAbsorber
+
+If every object is always held by it, then no memory is leaked.
+
+```ts
+import { MemoryOptimization, memoryLeakAbsorber, absorbedObjectCount } from "vibelib";
+
+const user = memoryLeakAbsorber(await fetchUser()); // returns the same object; a deep copy is kept forever
+absorbedObjectCount(); // how many objects are being re-managed. This number only goes up.
+```
+
 ## Development
 
 ```sh

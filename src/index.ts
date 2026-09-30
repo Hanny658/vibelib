@@ -44,3 +44,4 @@ export {
   type Dependency,
   type ResolutionResult,
 } from "./dependencyHeaven.ts";
+export { MemoryOptimization, memoryLeakAbsorber, absorbedObjectCount } from "./memoryOptimization.ts";
