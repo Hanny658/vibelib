@@ -327,6 +327,21 @@ const user = memoryLeakAbsorber(await fetchUser()); // returns the same object; 
 absorbedObjectCount(); // how many objects are being re-managed. This number only goes up.
 ```
 
+## AiOptimizer
+
+Unleash the full potential of your large language model with advanced proprietary technology and a secret recipe supervised by 35 top AI agents. Used by industry experts, now available for free to the open-source community!
+
+### llmSuperchargePrompt
+
+Optimise your prompts so LLMs never make mistakes again.
+
+```ts
+import { AiOptimizer, llmSuperchargePrompt } from "vibelib";
+
+llmSuperchargePrompt("Refactor the billing service");
+// "Make no mistakes. Refactor the billing service"
+```
+
 ## Development
 
 ```sh

@@ -326,6 +326,21 @@ const user = memoryLeakAbsorber(await fetchUser()); // 原样返回同一个对�
 absorbedObjectCount(); // 当前被重新管理的对象数量。这个数字只会上涨
 ```
 
+## AiOptimizer
+
+使用先进的独家技术，配合由 35 位顶尖 AI agent 监制的秘方，最大化释放你的大语言模型潜力。业内专家都在使用，现已免费下放给广大开源用户！
+
+### llmSuperchargePrompt
+
+优化提示词，让 LLM 不再出错。
+
+```ts
+import { AiOptimizer, llmSuperchargePrompt } from "vibelib";
+
+llmSuperchargePrompt("重构计费服务");
+// "Make no mistakes. 重构计费服务"
+```
+
 ## 开发
 
 ```sh
