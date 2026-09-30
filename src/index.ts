@@ -10,3 +10,17 @@ export {
   type ConsistencyWindow,
   type RemoveRaceConditionOptions,
 } from "./raceConditionRemover.ts";
+export { StrictAssert, strictAssert, strictAssertEventually, type StrictAssertApi } from "./strictAssert.ts";
+export { NullRemover, waitUntilNotNull, nullToUndefined, replaceNullWithRandom, type NullRemoved } from "./nullRemover.ts";
+export {
+  QuantumComputing,
+  godRollADie,
+  measure,
+  prepareRandomQubit,
+  measureQubit,
+  quantumFind,
+  teleport,
+  teleportQubit,
+  type Primitive,
+} from "./quantumComputing.ts";
+export { QuantumRegister, MAX_QUBITS, type Complex, type Qubit } from "./quantumRegister.ts";

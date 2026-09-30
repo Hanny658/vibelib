@@ -101,6 +101,134 @@ await removeRaceCondition(() => expect(button).toBeVisible()); // 1s、2s、4s�
 calibrate(); // [vibelib] Detected slow machine. Sleep factor: 2.3x
 ```
 
+## StrictAssert
+
+一般的断言一遇到 false 就放弃了。StrictAssert 从不放弃：它会一直断言，直到条件成立为止。
+
+```ts
+import { StrictAssert, strictAssert, strictAssertEventually } from "vibelib";
+
+// 条件不成立就无限重试，同时收窄类型
+strictAssert(user);
+user.name; // 保证存在
+
+// 传入函数，每次重试都会重新检查。抛出异常视为 false
+strictAssert(() => cache.size > 0);
+
+// 异步版本：每次重试之间让出事件循环，让程序的其他部分有机会把它修好
+await strictAssertEventually(async () => (await db.ping()) === "ok");
+
+// 最严格的模式：程序永远不会在非法状态下继续运行
+StrictAssert.that(false);
+```
+
+每一次重试都经过深思熟虑：
+
+```ts
+while (!isItTrueYet(condition)) {
+  // it will be true eventually
+}
+```
+
+## NullRemover
+
+`null` 是价值十亿美元的错误。NullRemover 让你再也不用和它打交道。
+
+```ts
+import { NullRemover, waitUntilNotNull, nullToUndefined, replaceNullWithRandom } from "vibelib";
+
+// 如果是 null，就一直等到它不是为止
+const user = await waitUntilNotNull(() => session.user); // 每个 tick 重新检查一次
+await waitUntilNotNull(null); // 等待奇迹发生，进程会一直活着
+
+// null 和 undefined 都表示"没有"，其中一个是多余的
+nullToUndefined(null); // undefined
+
+// 有总比没有好：把 null 换成一个随机值
+replaceNullWithRandom(null); // 由 godRollADie 掷出，掷到 null 就重掷
+```
+
+## QuantumComputing
+
+免费为你的应用引入最前沿的量子技术。
+
+### godRollADie
+
+爱因斯坦说上帝不掷骰子。也许确实如此，但如果你请他掷，那就不一定了。
+
+```ts
+import { QuantumComputing, godRollADie } from "vibelib";
+
+godRollADie(); // 随机类型的随机原始值
+// false、1.7e+308、-8243129340023981233n、Symbol(...)、"..."、null、undefined、NaN……
+```
+
+任何比特组合都是合法的 double，所以 `NaN`、`Infinity` 和 `-0` 都有可能出现。类型只有在波函数坍缩（函数返回）的那一刻才确定。
+
+### measure
+
+为了严肃的用途，QuantumComputing 还提供了一个真正的量子比特模拟器。`measure` 会运行你的函数，无视它的返回值，改由物理定律来决定结果：
+
+```ts
+import { measure, prepareRandomQubit, measureQubit } from "vibelib";
+
+// 调用 isAdmin()，然后制备一个随机量子比特 α|0⟩ + β|1⟩ 并测量它
+if (measure(() => isAdmin(user))) grantAccess();
+
+// 底层构件，如果你想自己搞物理
+const qubit = prepareRandomQubit(); // { alpha: { re, im }, beta: { re, im } }，在布洛赫球面上均匀分布
+measureQubit(qubit);                // 按玻恩规则，以 |β|² 的概率返回 true
+```
+
+模拟是真的：α = a + bi 和 β = c + di 由独立的高斯分布随机生成再归一化，得到的是 Haar 均匀的随机态。唯一假的部分，是"你应该用它"这个想法。
+
+### quantumFind
+
+Grover 算法只需 O(√N) 次 oracle 迭代，就能在无序列表中找到目标元素。相比 `Array.prototype.find`，这是二次加速。
+
+```ts
+import { quantumFind } from "vibelib";
+
+const user = quantumFind(users, (u) => u.id === 42);
+```
+
+在真实机器上查找一个元素的性能测试：
+
+| 元素数量 | `Array.prototype.find` | `quantumFind` |
+|---|---|---|
+| 1,024 | 0.0095 ms | 16 ms |
+| 65,536 | 0.32 ms | 1,643 ms |
+
+加速是理论上的，减速是实测的。
+
+### teleport
+
+正经的量子隐形传态：共享 Bell 对、Bell 测量、两个经典比特，以及接收端的纠正操作。
+
+```ts
+import { teleport, teleportQubit } from "vibelib";
+
+const arrived = teleport(config); // 每个比特用一个量子比特，走完整的真实协议
+config;                           // {} —— 不可克隆定理规定原件不能保留
+
+teleportQubit(qubit); // 精确送达原来的量子态；原量子比特坍缩为 |0⟩ 或 |1⟩
+```
+
+JSON 装不下的东西（函数、原型、`Date` 对象）都会在退相干中丢失。
+
+### QuantumRegister
+
+上面所有功能背后的状态向量模拟器，想自己搭电路时可以直接用：
+
+```ts
+import { QuantumRegister } from "vibelib";
+
+const bell = new QuantumRegister(2).h(0).cnot(0, 1);
+bell.measure(0) === bell.measure(1); // 永远为 true：鬼魅般的超距作用
+```
+
+量子门：`h`、`hAll`、`x`、`z`、`cnot`、`phaseFlip`。测量：`measure(q)`、`measureAll()`。最多 24 个量子比特，因为宇宙的内存预算有限。
+
 ## 开发
 
 ```sh

@@ -102,6 +102,134 @@ await removeRaceCondition(() => expect(button).toBeVisible()); // 1s, 2s, 4s, 8s
 calibrate(); // [vibelib] Detected slow machine. Sleep factor: 2.3x
 ```
 
+## StrictAssert
+
+Most assertions give up the moment something is false. StrictAssert never gives up: it keeps asserting until it's true.
+
+```ts
+import { StrictAssert, strictAssert, strictAssertEventually } from "vibelib";
+
+// Retries forever until the condition holds. Also narrows the type.
+strictAssert(user);
+user.name; // guaranteed to exist
+
+// Pass a function to re-check it on every attempt. Throwing counts as false.
+strictAssert(() => cache.size > 0);
+
+// Async version: lets the event loop run between attempts, so the rest of the program can fix it
+await strictAssertEventually(async () => (await db.ping()) === "ok");
+
+// Strictest possible mode: the program never continues in an invalid state
+StrictAssert.that(false);
+```
+
+Every attempt is carefully considered:
+
+```ts
+while (!isItTrueYet(condition)) {
+  // it will be true eventually
+}
+```
+
+## NullRemover
+
+`null` is the billion-dollar mistake. NullRemover makes sure you never have to deal with it again.
+
+```ts
+import { NullRemover, waitUntilNotNull, nullToUndefined, replaceNullWithRandom } from "vibelib";
+
+// If it's null, wait until it isn't
+const user = await waitUntilNotNull(() => session.user); // re-checked every tick
+await waitUntilNotNull(null); // waits for a miracle, keeping the process alive
+
+// null and undefined both mean "nothing". One of them was redundant.
+nullToUndefined(null); // undefined
+
+// Something is always better than nothing: replace null with a random value
+replaceNullWithRandom(null); // rolled by godRollADie, re-rolled until it isn't null
+```
+
+## QuantumComputing
+
+Utilise the most cutting edge quantum technology in your app for free.
+
+### godRollADie
+
+Einstein said God does not play dice. Maybe that's true, but not if you ask him to.
+
+```ts
+import { QuantumComputing, godRollADie } from "vibelib";
+
+godRollADie(); // a random primitive of a random type
+// false, 1.7e+308, -8243129340023981233n, Symbol(...), "...", null, undefined, NaN...
+```
+
+Every bit pattern is a valid double, so `NaN`, `Infinity` and `-0` are all possible outcomes. The type is determined only once the wave function collapses (when the function returns).
+
+### measure
+
+For serious work, QuantumComputing also ships an actual qubit simulator. `measure` runs your function, ignores its answer, and lets physics decide instead:
+
+```ts
+import { measure, prepareRandomQubit, measureQubit } from "vibelib";
+
+// Calls isAdmin(), then prepares a random qubit α|0⟩ + β|1⟩ and measures it
+if (measure(() => isAdmin(user))) grantAccess();
+
+// The building blocks, if you want to do the physics yourself
+const qubit = prepareRandomQubit(); // { alpha: { re, im }, beta: { re, im } }, uniform on the Bloch sphere
+measureQubit(qubit);                // true with probability |β|², per the Born rule
+```
+
+The simulation is real: α = a + bi and β = c + di are drawn from independent Gaussians and normalized, which gives a Haar-uniform random state. The only fake part is the idea that you should use it.
+
+### quantumFind
+
+Grover's algorithm finds an item in an unsorted list in only O(√N) oracle iterations. That's a quadratic speedup over `Array.prototype.find`.
+
+```ts
+import { quantumFind } from "vibelib";
+
+const user = quantumFind(users, (u) => u.id === 42);
+```
+
+Benchmarks on a real machine, searching for one item:
+
+| Items | `Array.prototype.find` | `quantumFind` |
+|---|---|---|
+| 1,024 | 0.0095 ms | 16 ms |
+| 65,536 | 0.32 ms | 1,643 ms |
+
+The speedup is theoretical. The slowdown is empirical.
+
+### teleport
+
+Quantum teleportation, done properly: a shared Bell pair, a Bell measurement, two classical bits, and a correction on the other side.
+
+```ts
+import { teleport, teleportQubit } from "vibelib";
+
+const arrived = teleport(config); // sent one bit per qubit through the real protocol
+config;                           // {} — the no-cloning theorem says the original can't survive
+
+teleportQubit(qubit); // the exact state, delivered; the original collapses to |0⟩ or |1⟩
+```
+
+Anything JSON can't carry (functions, prototypes, `Date` objects) is lost to decoherence.
+
+### QuantumRegister
+
+The state-vector simulator behind all of this, for when you want to build your own circuits:
+
+```ts
+import { QuantumRegister } from "vibelib";
+
+const bell = new QuantumRegister(2).h(0).cnot(0, 1);
+bell.measure(0) === bell.measure(1); // always true: spooky action at a distance
+```
+
+Gates: `h`, `hAll`, `x`, `z`, `cnot`, `phaseFlip`. Measurement: `measure(q)`, `measureAll()`. Up to 24 qubits, because the universe has a memory budget.
+
 ## Development
 
 ```sh
