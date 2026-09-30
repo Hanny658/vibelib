@@ -227,7 +227,7 @@ const bell = new QuantumRegister(2).h(0).cnot(0, 1);
 bell.measure(0) === bell.measure(1); // 永远为 true：鬼魅般的超距作用
 ```
 
-量子门：`h`、`hAll`、`x`、`z`、`cnot`、`phaseFlip`。测量：`measure(q)`、`measureAll()`。最多 24 个量子比特，因为宇宙的内存预算有限。
+量子门：`h`、`hAll`、`x`、`z`、`cnot`、`phaseFlip`。测量：`measure(q)`、`measureAll()`。最多 24 个量子比特，因为宇宙的内存预算有限（现在内存太贵了，上帝买不起 DDR5）。
 
 ## 开发
 

@@ -228,7 +228,7 @@ const bell = new QuantumRegister(2).h(0).cnot(0, 1);
 bell.measure(0) === bell.measure(1); // always true: spooky action at a distance
 ```
 
-Gates: `h`, `hAll`, `x`, `z`, `cnot`, `phaseFlip`. Measurement: `measure(q)`, `measureAll()`. Up to 24 qubits, because the universe has a memory budget.
+Gates: `h`, `hAll`, `x`, `z`, `cnot`, `phaseFlip`. Measurement: `measure(q)`, `measureAll()`. Up to 24 qubits, because the universe has a memory budget (RAM is too expensive these days; God can't afford DDR5).
 
 ## Development
 
