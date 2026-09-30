@@ -24,3 +24,21 @@ export {
   type Primitive,
 } from "./quantumComputing.ts";
 export { QuantumRegister, MAX_QUBITS, type Complex, type Qubit } from "./quantumRegister.ts";
+export {
+  Realisticfy,
+  createFrustrationGate,
+  requireFrustration,
+  createRealState,
+  type FrustrationGate,
+  type FrustrationOptions,
+  type RealState,
+  type SetStateAction,
+} from "./realisticfy.ts";
+export {
+  DependencyHeaven,
+  niceNegotiator,
+  alwaysWorkResolver,
+  type NegotiationResult,
+  type Dependency,
+  type ResolutionResult,
+} from "./dependencyHeaven.ts";

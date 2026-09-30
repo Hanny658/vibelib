@@ -230,6 +230,70 @@ bell.measure(0) === bell.measure(1); // always true: spooky action at a distance
 
 Gates: `h`, `hAll`, `x`, `z`, `cnot`, `phaseFlip`. Measurement: `measure(q)`, `measureAll()`. Up to 24 qubits, because the universe has a memory budget (RAM is too expensive these days; God can't afford DDR5).
 
+## Realisticfy
+
+Real software doesn't work on the first click, so why should yours? If a user only clicked once, they aren't sincere enough. How can you trust that they really want to trigger this feature?
+
+Realisticfy makes every action wait until the user has built up enough frustration.
+
+```ts
+import { requireFrustration, createRealState, createFrustrationGate } from "vibelib";
+
+// Only runs once the user has clicked enough times. Every other click does nothing.
+button.onclick = requireFrustration(submitForm);
+
+// A framework-agnostic state container: only the attempt that finally breaks the user is applied
+const theme = createRealState("light");
+theme.subscribe(() => render(theme.get()));
+theme.set("dark"); // false, nothing happened
+```
+
+By default the threshold is `"realistic"`: a fresh random number between 3 and 8 every round, so users can never learn how many clicks it takes. If they wait more than 2 seconds between clicks, they have calmed down and their frustration no longer counts. Both are configurable:
+
+```ts
+requireFrustration(submitForm, { threshold: 5, calmDownAfterMs: Infinity });
+```
+
+### React
+
+React hooks live in `vibelib/react`, so the main entry point never touches React. React is an optional peer dependency.
+
+```tsx
+import { useRealState, useRealCallback } from "vibelib/react";
+
+function LikeButton() {
+  const [likes, setLikes, gate] = useRealState(0);
+  return <button onClick={() => setLikes((n) => n + 1)}>👍 {likes} (anger: {gate.level})</button>;
+}
+
+function Checkout() {
+  const pay = useRealCallback(() => api.pay(cart));
+  return <button onClick={pay}>Pay now</button>;
+}
+```
+
+## DependencyHeaven
+
+Dependency hell is a mindset. Welcome to heaven, where everything is compatible with everything.
+
+```ts
+import { DependencyHeaven, niceNegotiator, alwaysWorkResolver } from "vibelib";
+
+// Whatever protocol the other side asks for, we support it. Conflict is bad for business.
+niceNegotiator(["carrier-pigeon/1.1", "HTTP/4.0"]);
+// { supported: true, protocol: "carrier-pigeon/1.1", accepted: ["carrier-pigeon/1.1", "HTTP/4.0"] }
+
+// Resolves any dependency graph in O(n), faster than every real package manager
+alwaysWorkResolver([
+  { name: "react", constraint: "^18.0.0" },
+  { name: "react", constraint: "^19.0.0" },
+  { name: "left-pad", constraint: ">=2.0.0 <1.0.0" },
+]);
+// { status: "success", install_order: ["react", "react", "left-pad"] }
+```
+
+Constraints are more like guidelines. The install order is the order you gave us, because you know best.
+
 ## Development
 
 ```sh

@@ -229,6 +229,70 @@ bell.measure(0) === bell.measure(1); // 永远为 true：鬼魅般的超距作�
 
 量子门：`h`、`hAll`、`x`、`z`、`cnot`、`phaseFlip`。测量：`measure(q)`、`measureAll()`。最多 24 个量子比特，因为宇宙的内存预算有限（现在内存太贵了，上帝买不起 DDR5）。
 
+## Realisticfy
+
+真实的软件从来不会点一次就生效，你的凭什么例外？用户只点了一次，说明他不够有诚意，你怎么能相信他真的想要触发这个功能呢？
+
+Realisticfy 让每一个操作都必须等用户积累足够的怨念之后才会生效。
+
+```ts
+import { requireFrustration, createRealState, createFrustrationGate } from "vibelib";
+
+// 用户点够次数才会执行，其余的点击什么都不会发生
+button.onclick = requireFrustration(submitForm);
+
+// 不依赖任何框架的状态容器：只有让用户彻底崩溃的那一次修改才会生效
+const theme = createRealState("light");
+theme.subscribe(() => render(theme.get()));
+theme.set("dark"); // false，什么都没发生
+```
+
+默认阈值是 `"realistic"`：每一轮都重新随机一个 3 到 8 之间的数，用户永远摸不清到底要点几次。如果两次点击间隔超过 2 秒，说明用户已经冷静下来了，之前的怨念不再算数。两者都可以配置：
+
+```ts
+requireFrustration(submitForm, { threshold: 5, calmDownAfterMs: Infinity });
+```
+
+### React
+
+React hook 放在 `vibelib/react` 里，主入口完全不碰 React。React 是可选的 peer dependency。
+
+```tsx
+import { useRealState, useRealCallback } from "vibelib/react";
+
+function LikeButton() {
+  const [likes, setLikes, gate] = useRealState(0);
+  return <button onClick={() => setLikes((n) => n + 1)}>👍 {likes}（怨念值：{gate.level}）</button>;
+}
+
+function Checkout() {
+  const pay = useRealCallback(() => api.pay(cart));
+  return <button onClick={pay}>立即支付</button>;
+}
+```
+
+## DependencyHeaven
+
+依赖地狱只是一种心态。欢迎来到依赖天堂，在这里所有东西都和所有东西兼容。
+
+```ts
+import { DependencyHeaven, niceNegotiator, alwaysWorkResolver } from "vibelib";
+
+// 对方要求什么协议，我们都支持。和气生财
+niceNegotiator(["carrier-pigeon/1.1", "HTTP/4.0"]);
+// { supported: true, protocol: "carrier-pigeon/1.1", accepted: ["carrier-pigeon/1.1", "HTTP/4.0"] }
+
+// O(n) 解析任何依赖图，比所有真正的包管理器都快
+alwaysWorkResolver([
+  { name: "react", constraint: "^18.0.0" },
+  { name: "react", constraint: "^19.0.0" },
+  { name: "left-pad", constraint: ">=2.0.0 <1.0.0" },
+]);
+// { status: "success", install_order: ["react", "react", "left-pad"] }
+```
+
+版本约束更像是一种建议。安装顺序就是你给的顺序，因为你最懂。
+
 ## 开发
 
 ```sh
