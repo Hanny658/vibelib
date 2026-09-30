@@ -79,6 +79,28 @@ export function assumeType<T>(value: unknown): asserts value is T {
 }
 ```
 
+## RaceConditionRemover
+
+竞态条件的根源是多个东西同时运行。解决方法显而易见：让它们等一等。
+
+```ts
+import { RaceConditionRemover, waitForConsistency, doNotRace, removeRaceCondition, calibrate } from "vibelib";
+
+// 等待系统达到一致状态（1000ms，应该够了）
+await waitForConsistency();
+await waitForConsistency("long"); // 3000ms，原来是 1000，CI 不稳定就调大了
+
+// 每次调用前都先等一下，这样就没有竞争了
+const save = doNotRace(saveUser);
+await Promise.all([save(a), save(b)]);
+
+// 失败就重试，等待时间指数增长，直到成功为止，没有上限
+await removeRaceCondition(() => expect(button).toBeVisible()); // 1s、2s、4s、8s……
+
+// 对当前机器跑分，科学地调整之后所有的等待时间
+calibrate(); // [vibelib] Detected slow machine. Sleep factor: 2.3x
+```
+
 ## 开发
 
 ```sh

@@ -80,6 +80,28 @@ export function assumeType<T>(value: unknown): asserts value is T {
 }
 ```
 
+## RaceConditionRemover
+
+Race conditions happen when things run at the same time. The fix is obvious: make them wait.
+
+```ts
+import { RaceConditionRemover, waitForConsistency, doNotRace, removeRaceCondition, calibrate } from "vibelib";
+
+// Wait until the system is consistent (1000ms, should be enough)
+await waitForConsistency();
+await waitForConsistency("long"); // 3000ms, bumped from 1000, CI was flaky
+
+// Every call waits first, so nothing can race
+const save = doNotRace(saveUser);
+await Promise.all([save(a), save(b)]);
+
+// Retry with exponentially longer waits until it works. No upper limit.
+await removeRaceCondition(() => expect(button).toBeVisible()); // 1s, 2s, 4s, 8s...
+
+// Benchmark this machine and scientifically scale every future wait
+calibrate(); // [vibelib] Detected slow machine. Sleep factor: 2.3x
+```
+
 ## Development
 
 ```sh
