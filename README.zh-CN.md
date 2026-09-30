@@ -1,5 +1,7 @@
 # vibelib
 
+[![CI](.github/badges/ci.svg)](https://github.com/swinzy/vibelib/actions)
+
 [English](README.md) | 简体中文
 
 > Enterprise-grade utilities for making your program run. Somehow.
