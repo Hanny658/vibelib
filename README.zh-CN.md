@@ -52,6 +52,33 @@ execAndPray(async () => sendEmail()); // 同步异常和异步 reject 都会被�
 prayAll(flushCache, notifyAdmin, chargeCreditCard); // 批量祈祷，一次到位
 ```
 
+## TypeTrust
+
+类型只是建议。只要你足够相信，任何值都可以是任何类型。
+
+```ts
+import { TypeTrust, trustMe, assumeType } from "vibelib";
+
+// 把任何东西断言成任何类型
+const user = trustMe<User>(JSON.parse(body)); // 它就是 User，相信我
+
+// 断言函数：从这一行起收窄类型，但什么都不检查
+const value: unknown = await fetchSomething();
+assumeType<Order[]>(value);
+value.map((o) => o.total); // 完美通过编译
+
+TypeTrust.cast<number>("42");  // 现在是 number 了
+TypeTrust.assume<string>(null); // 现在是 string 了
+```
+
+类型检查的实现经过精心设计：
+
+```ts
+export function assumeType<T>(value: unknown): asserts value is T {
+  // trust me
+}
+```
+
 ## 开发
 
 ```sh

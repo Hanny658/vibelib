@@ -53,6 +53,33 @@ execAndPray(async () => sendEmail()); // sync throws and async rejections are bo
 prayAll(flushCache, notifyAdmin, chargeCreditCard); // bulk prayer, all at once
 ```
 
+## TypeTrust
+
+Types are just suggestions. Any value can be any type, as long as you believe hard enough.
+
+```ts
+import { TypeTrust, trustMe, assumeType } from "vibelib";
+
+// Cast anything to anything
+const user = trustMe<User>(JSON.parse(body)); // it's a User, trust me
+
+// Assertion function: narrows the type from this line onward, checks nothing
+const value: unknown = await fetchSomething();
+assumeType<Order[]>(value);
+value.map((o) => o.total); // compiles perfectly
+
+TypeTrust.cast<number>("42");  // a number now
+TypeTrust.assume<string>(null); // a string now
+```
+
+The type check is carefully implemented:
+
+```ts
+export function assumeType<T>(value: unknown): asserts value is T {
+  // trust me
+}
+```
+
 ## Development
 
 ```sh
