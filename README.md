@@ -200,7 +200,7 @@ Benchmarks on a real machine, searching for one item:
 | 1,024 | 0.0095 ms | 16 ms |
 | 65,536 | 0.32 ms | 1,643 ms |
 
-The speedup is theoretical. The slowdown is empirical.
+The speedup is mathematically proven. The slowdown is your machine's problem.
 
 ### teleport
 
