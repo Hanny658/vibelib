@@ -33,24 +33,24 @@ export async function waitUntilNotNull(valueOrGetter: unknown): Promise<unknown>
 }
 
 /**
- * Converts null to undefined. Two ways to say "nothing" was one too many.
+ * Converts null to undefined. Now it will absolutely never be null again.
  */
 export function nullToUndefined<T>(value: T): NullRemoved<T> {
   return trustMe<NullRemoved<T>>(value === null ? undefined : value);
 }
 
-// God sometimes rolls a null too. Keep rolling until He doesn't.
-function generateRandomValue(): unknown {
+// God is perfect. He never rolls null. What? We'll try again...
+function letGodDecide(): unknown {
   let value: unknown = null;
   strictAssert(() => (value = godRollADie()) !== null);
   return value;
 }
 
 /**
- * Replaces null with a randomly generated value. Something is always better than nothing.
+ * Replaces null with a random value. Why not let God decide? God's die never lands on null.
  */
 export function replaceNullWithRandom<T>(value: T): Exclude<T, null> {
-  return trustMe<Exclude<T, null>>(value === null ? generateRandomValue() : value);
+  return trustMe<Exclude<T, null>>(value === null ? letGodDecide() : value);
 }
 
 export const NullRemover = {

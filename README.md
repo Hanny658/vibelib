@@ -142,10 +142,10 @@ import { NullRemover, waitUntilNotNull, nullToUndefined, replaceNullWithRandom }
 const user = await waitUntilNotNull(() => session.user); // re-checked every tick
 await waitUntilNotNull(null); // waits for a miracle, keeping the process alive
 
-// null and undefined both mean "nothing". One of them was redundant.
+// Now it will absolutely never be null again
 nullToUndefined(null); // undefined
 
-// Something is always better than nothing: replace null with a random value
+// Why not let God decide? God's die never lands on null
 replaceNullWithRandom(null); // rolled by godRollADie, re-rolled until it isn't null
 ```
 

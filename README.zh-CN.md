@@ -141,10 +141,10 @@ import { NullRemover, waitUntilNotNull, nullToUndefined, replaceNullWithRandom }
 const user = await waitUntilNotNull(() => session.user); // 每个 tick 重新检查一次
 await waitUntilNotNull(null); // 等待奇迹发生，进程会一直活着
 
-// null 和 undefined 都表示"没有"，其中一个是多余的
+// 现在它绝对不会再是 null 了
 nullToUndefined(null); // undefined
 
-// 有总比没有好：把 null 换成一个随机值
+// 不如让上帝来决定吧？上帝的骰子掷不到 null
 replaceNullWithRandom(null); // 由 godRollADie 掷出，掷到 null 就重掷
 ```
 
