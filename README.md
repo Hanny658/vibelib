@@ -269,8 +269,20 @@ requireFrustration(submitForm, { threshold: 5, calmDownAfterMs: Infinity });
 ```ts
 import { realTry } from "vibelib";
 
-realTry(() => deploy())((error) => alertOnCall(error));
+// Wrap the code you want to run, just like a try block
+const realCatch = realTry(() => {
+  deploy();
+});
+
+// Then handle errors, just like a catch block... But don't worry: when it detects a
+// development environment, it will never report an error or get in your way.
+// It only reports errors on the customer's machine.
+realCatch((error) => {
+  alertOnCall(error);
+});
 ```
+
+A traditional try/catch swallows exceptions, so customers never get to see the errors. Real commercial software usually only throws errors on the customer's machine, and never on the developer's. This is because the customer is always right, but your program might not be.
 
 ### React
 

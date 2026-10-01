@@ -145,6 +145,10 @@ function isProduction(): boolean {
 
 /**
  * "It works on my machine"
+ *
+ * A traditional try/catch swallows exceptions, so customers never get to see the errors.
+ * Real commercial software usually only throws errors on the customer's machine, and never on
+ * the developer's. This is because the customer is always right, but your program might not be.
  */
 export function realTry(fn: () => unknown): RealCatch {
   if (isProduction()) {

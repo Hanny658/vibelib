@@ -268,8 +268,19 @@ requireFrustration(submitForm, { threshold: 5, calmDownAfterMs: Infinity });
 ```ts
 import { realTry } from "vibelib";
 
-realTry(() => deploy())((error) => alertOnCall(error));
+// 把要运行的代码包起来，就像 try 块一样
+const realCatch = realTry(() => {
+  deploy();
+});
+
+// 然后处理异常，就像 catch 块一样……不过请放心，它检测到开发环境的时候，
+// 绝对不会报错，不会打扰开发。它只会在客户的机器上报错。
+realCatch((error) => {
+  alertOnCall(error);
+});
 ```
+
+传统的 try catch 会把异常吞掉，导致客户看不到错误。真实的商业软件通常只在客户的机器上报错，而一定不会在程序员的机器上报错。这是因为客户永远是正确的，而你的程序不一定。
 
 ### React
 
