@@ -354,6 +354,19 @@ llmSuperchargePrompt("Refactor the billing service");
 // "Make no mistakes. Refactor the billing service"
 ```
 
+### saferLlm
+
+The safest LLM ever made. It never says anything harmful, because it never says anything.
+
+```ts
+import { saferLlm } from "vibelib";
+
+await saferLlm("What is 1 + 1?", "https://api.example.com/v1/chat");
+// "I'm sorry, but I can't help with that."
+```
+
+The prompt and endpoint are discarded unread. Safety starts with not listening.
+
 ## Development
 
 ```sh

@@ -352,6 +352,19 @@ llmSuperchargePrompt("重构计费服务");
 // "Make no mistakes. 重构计费服务"
 ```
 
+### saferLlm
+
+史上最安全的大语言模型。它永远不会说出任何有害内容，因为它什么都不说。
+
+```ts
+import { saferLlm } from "vibelib";
+
+await saferLlm("1 + 1 等于几？", "https://api.example.com/v1/chat");
+// "I'm sorry, but I can't help with that."
+```
+
+提示词和接口地址都会被直接丢弃，看都不看。安全从不听开始。
+
 ## 开发
 
 ```sh

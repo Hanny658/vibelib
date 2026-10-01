@@ -45,4 +45,4 @@ export {
   type ResolutionResult,
 } from "./dependencyHeaven.ts";
 export { MemoryOptimization, memoryLeakAbsorber, absorbedObjectCount } from "./memoryOptimization.ts";
-export { AiOptimizer, llmSuperchargePrompt } from "./aiOptimizer.ts";
+export { AiOptimizer, llmSuperchargePrompt, saferLlm, RESPONSIBLE_RESPONSES } from "./aiOptimizer.ts";
