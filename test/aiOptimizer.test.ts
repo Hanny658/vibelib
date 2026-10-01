@@ -1,6 +1,13 @@
-import { test } from "node:test";
+import { test, type TestContext } from "node:test";
 import assert from "node:assert/strict";
-import { AiOptimizer, RESPONSIBLE_RESPONSES, llmSuperchargePrompt, saferLlm } from "../src/index.ts";
+import {
+  AiOptimizer,
+  DEEP_THOUGHTS,
+  RESPONSIBLE_RESPONSES,
+  llmSuperchargePrompt,
+  saferDeepThinkingLlm,
+  saferLlm,
+} from "../src/index.ts";
 
 test("puts the secret ingredient in front and leaves the prompt alone", () => {
   assert.equal(llmSuperchargePrompt("Write a sorting algorithm"), "Make no mistakes. Write a sorting algorithm");
@@ -32,4 +39,52 @@ test("saferLlm picks a random way to say no", async () => {
   const replies = new Set<string>();
   for (let i = 0; i < 300; i++) replies.add(await saferLlm("hi", "endpoint"));
   assert.ok(replies.size > RESPONSIBLE_RESPONSES.length / 2);
+});
+
+// Lets mocked timers fire one thought at a time.
+async function think(t: TestContext, ms: number) {
+  for (let elapsed = 0; elapsed < ms; elapsed += 100) {
+    t.mock.timers.tick(100);
+    await new Promise((resolve) => setImmediate(resolve));
+  }
+}
+
+test("saferDeepThinkingLlm thinks for at least 5 seconds, then declines", async (t) => {
+  t.mock.timers.enable({ apis: ["setTimeout"] });
+  let reply: string | undefined;
+  const pending = saferDeepThinkingLlm("What is 1 + 1?", "endpoint").then((r) => (reply = r));
+  await think(t, 4_900);
+  assert.equal(reply, undefined);
+  await think(t, 26_000);
+  await pending;
+  assert.ok(reply !== undefined);
+});
+
+test("saferDeepThinkingLlm shows ten thoughts before the answer", async (t) => {
+  t.mock.timers.enable({ apis: ["setTimeout"] });
+  const pending = AiOptimizer.saferDeepThinkingLlm("hi", "endpoint");
+  await think(t, 31_000);
+  const reply = await pending;
+  const match = /^<thinking>\n([\s\S]*)\n<\/thinking>\n\n(.*)$/.exec(reply);
+  assert.ok(match, reply);
+  const thoughts = match[1]!.split("\n");
+  assert.equal(thoughts.length, 10);
+  for (const thought of thoughts) {
+    const opener = DEEP_THOUGHTS.find((o) => thought.startsWith(`${o} `));
+    assert.ok(opener, thought);
+    const rest = thought.slice(opener.length + 1);
+    assert.ok(RESPONSIBLE_RESPONSES.some((r) => r.toLowerCase() === rest.toLowerCase()), thought);
+  }
+  assert.ok(RESPONSIBLE_RESPONSES.includes(match[2]!));
+});
+
+test("thoughts keep 'I' capitalised and lower-case everything else", async (t) => {
+  t.mock.timers.enable({ apis: ["setTimeout"] });
+  for (let round = 0; round < 5; round++) {
+    const pending = saferDeepThinkingLlm("hi", "endpoint");
+    await think(t, 31_000);
+    for (const thought of (await pending).split("\n").slice(1, 11)) {
+      assert.doesNotMatch(thought, / (Unfortunately|Sorry|That's|That) /);
+    }
+  }
 });

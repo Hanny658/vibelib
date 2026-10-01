@@ -365,6 +365,28 @@ await saferLlm("1 + 1 等于几？", "https://api.example.com/v1/chat");
 
 提示词和接口地址都会被直接丢弃，看都不看。安全从不听开始。
 
+### saferDeepThinkingLlm
+
+和 `saferLlm` 一样，但它会先对你的请求进行深度思考：十轮缜密的思考，总共 5 到 30 秒，完整的思考过程会展示在最终答案之前。答案还是一样的，你花钱买的是思考过程。
+
+```ts
+import { saferDeepThinkingLlm } from "vibelib";
+
+await saferDeepThinkingLlm("1 + 1 等于几？", "https://api.example.com/v1/chat");
+```
+
+```
+<thinking>
+Actually, I'm sorry, but I can't help with that.
+For this, sorry, I can't assist with that.
+User said this, so I must respectfully decline.
+I could be wrong that I'm unable to assist with this request.
+...
+</thinking>
+
+Sorry, I can't assist with that.
+```
+
 ## 开发
 
 ```sh

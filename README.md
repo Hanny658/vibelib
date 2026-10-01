@@ -367,6 +367,28 @@ await saferLlm("What is 1 + 1?", "https://api.example.com/v1/chat");
 
 The prompt and endpoint are discarded unread. Safety starts with not listening.
 
+### saferDeepThinkingLlm
+
+Like `saferLlm`, but it thinks deeply about your request first: ten careful thoughts, 5 to 30 seconds in total, all shown to you before the final answer. The answer is the same; the thinking is what you're paying for.
+
+```ts
+import { saferDeepThinkingLlm } from "vibelib";
+
+await saferDeepThinkingLlm("What is 1 + 1?", "https://api.example.com/v1/chat");
+```
+
+```
+<thinking>
+Actually, I'm sorry, but I can't help with that.
+For this, sorry, I can't assist with that.
+User said this, so I must respectfully decline.
+I could be wrong that I'm unable to assist with this request.
+...
+</thinking>
+
+Sorry, I can't assist with that.
+```
+
 ## Development
 
 ```sh
